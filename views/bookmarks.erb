@@ -2,9 +2,14 @@
 <ul>
   <% @bookmark_list.each do |bookmark| %>
     <li>
+
+    <form action='/delete_bookmark' method='post'>
       <a href="<%= bookmark.url %>">
         <%= bookmark.title %>
       </a>
+      <input type="radio" name="delete" value= <%= bookmark.title %> >
     </li>
   <% end %>
+  <input type='submit' name='Delete' id='delete'>
+  </form>
 </ul>

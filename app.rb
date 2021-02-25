@@ -2,7 +2,7 @@ require 'sinatra/base'
 require './lib/bookmark.rb'
 
 class BookmarkManager < Sinatra::Base
- 
+
   before do
     @bookmark_list = Bookmark.all
   end
@@ -14,6 +14,11 @@ class BookmarkManager < Sinatra::Base
     post '/add_bookmark' do
       Bookmark.create(url: params[:url], title: params[:title])
       redirect '/'
+    end
+
+    post '/delete_bookmark' do
+      Bookmark.delete(title: params[:title])
+      redirect '/bookmarks'
     end
 
     get '/bookmarks' do

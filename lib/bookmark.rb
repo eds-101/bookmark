@@ -40,7 +40,14 @@ class Bookmark
     end
     connection.exec(" DELETE FROM bookmarks WHERE id = #{id} ;")
   end
-
-
-
-end
+  
+  def self.update(id:)
+    if ENV['ENVIRONMENT'] == 'test'
+      connection = PG.connect(dbname: 'bookmark_manager_test')
+    else
+      connection = PG.connect(dbname: 'bookmark_manager')
+    end
+    # connection.exec(" UPDATE bookmarks SET WHERE id = #{id} ;")
+  end
+    
+  end

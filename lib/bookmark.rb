@@ -1,4 +1,5 @@
 require 'pg'
+require 'uri'
 
 class Bookmark
 
@@ -11,6 +12,8 @@ class Bookmark
   end
 
   def self.create(url:, title:)
+    return false unless is_url?(url)
+    
     if ENV['ENVIRONMENT'] == 'test'
       connection = PG.connect(dbname: 'bookmark_manager_test')
     else
@@ -41,13 +44,21 @@ class Bookmark
     connection.exec(" DELETE FROM bookmarks WHERE id = #{id} ;")
   end
   
-  def self.update(id:)
+  
+  def self.update(id:, title:, url:)
     if ENV['ENVIRONMENT'] == 'test'
       connection = PG.connect(dbname: 'bookmark_manager_test')
     else
       connection = PG.connect(dbname: 'bookmark_manager')
     end
-    # connection.exec(" UPDATE bookmarks SET WHERE id = #{id} ;")
+    # connection.exec(" DELETE FROM bookmarks WHERE id = #{id} ;")
+    connection.exec("UPDATE bookmarks SET title = '#{title}', url = '#{url}' WHERE id = #{id}")
   end
-    
+
+  private
+
+  def self.is_url?(url)
+    url =~ /\A#{URI::regexp(['http', 'https'])}\z/
   end
+
+end
